@@ -1,4 +1,5 @@
-import * as fs from "fs/promises";
+const CLIENT_CSS = `{CLIENT_CSS_REPLACE_ME}`;
+const CLIENT_JS = `{CLIENT_JS_REPLACE_ME}`;
 
 export type Story = {
   kind: "Story";
@@ -70,12 +71,12 @@ function renderStory(
     `.trim();
 }
 
-async function renderJavaScript(): Promise<string> {
-  return `<script type="text/javascript">${(await fs.readFile(__dirname + "/client/story.js")).toString("utf-8")}</script>`;
+function renderJavaScript(): string {
+  return `<script type="text/javascript">${CLIENT_JS}</script>`;
 }
 
-async function renderCss(): Promise<string> {
-  return `<style>${(await fs.readFile(__dirname + "/client/story.css")).toString("utf-8")}</style>`;
+function renderCss(): string {
+  return `<style>${CLIENT_CSS}</style>`;
 }
 
 export type StorySort = "top" | "new" | "default";
@@ -122,12 +123,12 @@ export async function renderStories(
   domainUrl: string
 ): Promise<string> {
   return `
-${await renderCss()}
+${renderCss()}
 <div class="stories">
     ${sort(stories, storySort)
       .map((story) => renderStory(story, upvoteUrl, topicUrl, domainUrl))
       .join("\n")}
 </div>
-${await renderJavaScript()}
+${renderJavaScript()}
 `.trim();
 }

@@ -1,6 +1,6 @@
 import * as express from "express";
 import * as fs from "fs/promises";
-import { Story, renderStories } from "../../src/story";
+import { Story, renderStories } from "../../dist/story";
 
 const stories = [
   Story(
