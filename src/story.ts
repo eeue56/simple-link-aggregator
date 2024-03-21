@@ -40,13 +40,30 @@ function renderTopic(topic: string, topicUrl: string): string {
   return `<a class="story-topic" href="${topicUrl}/${topic}">${topic}</a>`;
 }
 
+function url_shim(href: string): { hostname: string } {
+  var match = href.match(
+    /^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/
+  );
+
+  if (match) {
+    return (
+      match && {
+        hostname: match[3],
+      }
+    );
+  }
+  return {
+    hostname: "",
+  };
+}
+
 function renderStory(
   story: Story,
   upvoteUrl: string,
   topicUrl: string,
   domainUrl: string
 ): string {
-  const url = new URL(story.link);
+  const { hostname } = url_shim(story.link);
 
   return `
 <div class="story">
@@ -59,7 +76,7 @@ function renderStory(
     </div>
     <div class="story-meta">
       <div class="story-date">${story.date.toLocaleDateString("gb")}</div>
-      <a href="${domainUrl}/${url.hostname}" class="story-domain">${url.hostname}</a>
+      <a href="${domainUrl}/${hostname}" class="story-domain">${hostname}</a>
       <div class="story-topics">${story.topic.map((topic) => renderTopic(topic, topicUrl)).join("\n")}</div>
     </div>
     <div class="story-description">
