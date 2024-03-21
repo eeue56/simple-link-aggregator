@@ -1,5 +1,8 @@
 const UPVOTED_ITEMS_KEY = "upvotedItems";
 
+// @ts-ignore
+const IS_GOOGLE_SCRIPT = typeof google !== "undefined";
+
 /**
  *
  * @returns {number[]}
@@ -58,32 +61,57 @@ async function upvoteClick(event) {
 
   clickedElement.classList.toggle("upvoted");
 
-  const response = /** @type {UpdatedPositiveFeedbackCount} */ (
-    await (
-      await fetch(url, {
-        method: "POST",
-        mode: "no-cors",
-        redirect: "follow",
+  if (IS_GOOGLE_SCRIPT) {
+    // @ts-ignore
+    const anyGoogle = /** @type {any} */ (google);
+    anyGoogle.script.run
+      .withSuccessHandler((/** @type {number} */ newCount) => {
+        const maybePositiveFeedbackElement = document.getElementById(
+          `story-positive-feedback-${id}`
+        );
+
+        if (maybePositiveFeedbackElement === null) {
+          console.log(
+            "Positive feedback element was missing from the DOM for some reason"
+          );
+          return;
+        }
+
+        maybePositiveFeedbackElement.innerText = `${newCount}`;
+
+        const upvotedItems = getUpvotedItems();
+        upvotedItems.push(id);
+        setUpvotedItems(upvotedItems);
       })
-    ).json()
-  );
-
-  const maybePositiveFeedbackElement = document.getElementById(
-    `story-positive-feedback-${id}`
-  );
-
-  if (maybePositiveFeedbackElement === null) {
-    console.log(
-      "Positive feedback element was missing from the DOM for some reason"
+      .upvoteStory(id);
+  } else {
+    const response = /** @type {UpdatedPositiveFeedbackCount} */ (
+      await (
+        await fetch(url, {
+          method: "POST",
+          mode: "no-cors",
+          redirect: "follow",
+        })
+      ).json()
     );
-    return;
+
+    const maybePositiveFeedbackElement = document.getElementById(
+      `story-positive-feedback-${id}`
+    );
+
+    if (maybePositiveFeedbackElement === null) {
+      console.log(
+        "Positive feedback element was missing from the DOM for some reason"
+      );
+      return;
+    }
+
+    maybePositiveFeedbackElement.innerText = `${response.positiveFeedback}`;
+
+    const upvotedItems = getUpvotedItems();
+    upvotedItems.push(id);
+    setUpvotedItems(upvotedItems);
   }
-
-  maybePositiveFeedbackElement.innerText = `${response.positiveFeedback}`;
-
-  const upvotedItems = getUpvotedItems();
-  upvotedItems.push(id);
-  setUpvotedItems(upvotedItems);
 }
 
 function restoreUpvotedItemsToDom() {
