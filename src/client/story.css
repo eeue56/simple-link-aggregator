@@ -1,0 +1,146 @@
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color: #f0f0f0;
+}
+
+.stories {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+}
+
+.story {
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    padding-bottom: 10px;
+}
+
+.story:after {
+    display: block;
+    clear: both;
+    content: " ";
+    position: relative;
+    left: 0;
+    bottom: 0;
+    height: 1px;
+    width: 30%;
+    border-bottom: 1px solid black;
+    margin: 0 auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.story > * {
+    margin-top: 5px;
+}
+
+.story-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding-bottom: 10px;
+}
+
+.story-voting {
+    display: inline-block;
+    font-size: 1.5em;
+}
+
+.story-upvote {
+    text-decoration: none;
+    color: transparent;
+    text-shadow: 0 0 0 grey;
+    cursor: pointer;
+}
+
+.story-upvote.upvoted {
+    color: transparent;
+    text-shadow: 0 0 0 darkgreen;
+    text-align: center;
+}
+
+.story-positive-feedback {
+    text-align: center;
+}
+
+.story-title {
+    font-size: 1.3em;
+    text-decoration: none;
+    font-weight: bold;
+    max-width: 85%;
+    color: #0d49bf;
+}
+
+.story-title:visited {
+    color: #4f6ba4;
+}
+
+.story-meta {
+    display: flex;
+    justify-content: space-evenly;
+    padding-bottom: 10px;
+}
+
+.story-meta::before, .story-meta::after {
+    align-self: stretch;
+    content: '';
+    border: 1px solid grey;
+  }
+
+.story-date {
+    order: -1;
+}
+
+.story-topics {
+    order: 1;
+}
+
+.story-domain, .story-domain:visited {
+    text-decoration: none;
+    font-weight: bold;
+    color: #0d49bf;
+}
+
+.story-topic, .story-topic:visited {
+    text-decoration: none;
+    font-weight: bold;
+    color: #0d49bf;
+}
+
+.story-description {
+    padding-left: 10px;
+    font-size: 1.1em;
+}
+
+.story-relevancy-title {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-style: italic;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background: #121212;
+        color: white;
+    }
+
+    .story:after {
+        border-bottom: 1px solid white;
+    }
+
+    .story-upvote.upvoted {
+        color:transparent;
+        text-shadow: 0 0 0 #32b332;
+    }
+
+    .story-title {
+        color: #8ab1ff;
+    }
+
+    .story-title:visited {
+        color: #4f8aff;
+    }
+}

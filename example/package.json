@@ -1,0 +1,19 @@
+{
+  "name": "simple-link-aggregator",
+  "version": "1.0.0",
+  "description": "A simple link aggregator built on AppScript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "prettier": "^3.2.5"
+  },
+  "dependencies": {
+    "@types/express": "^4.17.21",
+    "express": "^4.19.0"
+  }
+}
