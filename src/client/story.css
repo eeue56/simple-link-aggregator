@@ -3,6 +3,11 @@ body {
     background-color: #f0f0f0;
 }
 
+a, a:visited {
+    text-decoration: none;
+    color: #0d49bf;
+}
+
 .stories {
     display: flex;
     justify-content: space-evenly;
@@ -84,11 +89,20 @@ body {
     padding-bottom: 10px;
 }
 
+.story-meta > * {
+    flex: 1;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+}
+
 .story-meta::before, .story-meta::after {
     align-self: stretch;
     content: '';
     border: 1px solid grey;
-  }
+}
 
 .story-date {
     order: -1;
@@ -101,6 +115,7 @@ body {
 .story-domain, .story-domain:visited {
     text-decoration: none;
     font-weight: bold;
+    overflow-wrap: anywhere;
     color: #0d49bf;
 }
 

@@ -1,3 +1,5 @@
+import { markdownConverter } from "./markdown";
+
 const CLIENT_CSS = `{CLIENT_CSS_REPLACE_ME}`;
 const CLIENT_JS = `{CLIENT_JS_REPLACE_ME}`;
 
@@ -57,6 +59,10 @@ function url_shim(href: string): { hostname: string } {
   };
 }
 
+function stripEmojis(str: string): string {
+  return str.replace(/:.+:/g, "");
+}
+
 function renderStory(
   story: Story,
   upvoteUrl: string,
@@ -64,6 +70,9 @@ function renderStory(
   domainUrl: string
 ): string {
   const { hostname } = url_shim(story.link);
+  const title = stripEmojis(story.title);
+  const summary = stripEmojis(markdownConverter(story.summary));
+  const relevance = stripEmojis(markdownConverter(story.relevance));
 
   return `
 <div class="story">
@@ -72,7 +81,7 @@ function renderStory(
             <div id="story-upvote-${story.id}" class="story-upvote" data-upvote-url="${upvoteUrl}/${story.id}" data-story-id="${story.id}">🔺</div>
             <div id="story-positive-feedback-${story.id}" class="story-positive-feedback">${story.positiveFeedback}</div>
         </div>
-        <a href="${story.link}" class="story-title">${story.title}</a>
+        <a href="${story.link}" class="story-title">${title}</a>
     </div>
     <div class="story-meta">
       <div class="story-date">${story.date.toLocaleDateString("gb")}</div>
@@ -80,9 +89,9 @@ function renderStory(
       <div class="story-topics">${story.topic.map((topic) => renderTopic(topic, topicUrl)).join("\n")}</div>
     </div>
     <div class="story-description">
-        <div class="story-summary">${story.summary}</div>
+        <div class="story-summary">${summary}</div>
         <div class="story-relevancy-title">Why is this relevant to us?</div>
-        <div class="story-relevancy">${story.relevance}</div>
+        <div class="story-relevancy">${relevance}</div>
     </div>
 </div>
     `.trim();
