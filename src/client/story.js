@@ -59,7 +59,13 @@ async function upvoteClick(event) {
   clickedElement.classList.toggle("upvoted");
 
   const response = /** @type {UpdatedPositiveFeedbackCount} */ (
-    await (await fetch(url)).json()
+    await (
+      await fetch(url, {
+        method: "POST",
+        mode: "no-cors",
+        redirect: "follow",
+      })
+    ).json()
   );
 
   const maybePositiveFeedbackElement = document.getElementById(

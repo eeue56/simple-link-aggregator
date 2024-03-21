@@ -176,7 +176,7 @@ function main() {
     }
   );
 
-  app.get(
+  app.post(
     "/upvote/:id",
     async (
       request: express.Request,
