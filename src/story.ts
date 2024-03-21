@@ -132,13 +132,13 @@ function sort(stories: Story[], storySort: StorySort): Story[] {
  * @param domainUrl the url for seeing specific topics, it should look like https://example.com/domain/${story.id}
  * @returns
  */
-export async function renderStories(
+export function renderStories(
   stories: Story[],
   storySort: StorySort,
   upvoteUrl: string,
   topicUrl: string,
   domainUrl: string
-): Promise<string> {
+): string {
   return `
 ${renderCss()}
 <div class="stories">
