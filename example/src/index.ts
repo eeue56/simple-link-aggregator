@@ -1,5 +1,5 @@
 import * as express from "express";
-import * as fs from "fs/promises";
+import * as fs from "fs";
 import { Story, renderStories } from "../../dist/story";
 
 const stories = [
@@ -16,7 +16,7 @@ const stories = [
   Story(
     2,
     new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-    "https://github.com/eeue56/gwem",
+    "https://github.com/eeue56/gwe",
     "A ML-friendly language for targeting WebAssembly",
     ["Languages"],
     "A language for making WebAssembly easier as a target for ML family languages. Gwe is written in Rust, and targets WebAssembly. The language is intended to be a friendly layer between ML-languages and WebAssembly.",
@@ -61,11 +61,22 @@ Some highlights:
 - Dig into research papers.
 - Take on big projects and get uncomfortable.`,
     "Continual growth and personal development is an ambition we all probably have, but figuring out how to do so can be difficult. Ever got to your development talk session and not really been sure what to put as your goals? This article lists a few that could help guide you.",
-    200
+    150
   ),
 ];
 
+const originalStories = stories.map((story) => {
+  return { ...story };
+});
+
 function main() {
+  const withGoogleShim = !!process.env.WITH_GOOGLE_SHIM;
+  console.log(
+    withGoogleShim ? "Using Google shim..." : "Using regular JavaScript..."
+  );
+  const index = fs
+    .readFileSync(withGoogleShim ? "index_with_google.html" : "index.html")
+    .toString("utf-8");
   const app = express.default();
 
   app.get(
@@ -74,18 +85,10 @@ function main() {
       request: express.Request,
       response: express.Response
     ): Promise<void> => {
-      const index = (await fs.readFile("index.html")).toString("utf-8");
-
       response.send(
         index.replace(
           "{contents}",
-          await renderStories(
-            stories,
-            "default",
-            "/upvote",
-            "/topic",
-            "/domain"
-          )
+          renderStories(stories, "default", "/upvote", "/topic", "/domain")
         )
       );
     }
@@ -97,12 +100,10 @@ function main() {
       request: express.Request,
       response: express.Response
     ): Promise<void> => {
-      const index = (await fs.readFile("index.html")).toString("utf-8");
-
       response.send(
         index.replace(
           "{contents}",
-          await renderStories(
+          renderStories(
             stories.filter((story) =>
               story.topic.includes(request.params.name)
             ),
@@ -122,12 +123,10 @@ function main() {
       request: express.Request,
       response: express.Response
     ): Promise<void> => {
-      const index = (await fs.readFile("index.html")).toString("utf-8");
-
       response.send(
         index.replace(
           "{contents}",
-          await renderStories(
+          renderStories(
             stories.filter((story) => {
               const url = new URL(story.link);
               return url.hostname === request.params.name;
@@ -148,12 +147,10 @@ function main() {
       request: express.Request,
       response: express.Response
     ): Promise<void> => {
-      const index = (await fs.readFile("index.html")).toString("utf-8");
-
       response.send(
         index.replace(
           "{contents}",
-          await renderStories(stories, "new", "/upvote", "/topic", "/domain")
+          renderStories(stories, "new", "/upvote", "/topic", "/domain")
         )
       );
     }
@@ -165,12 +162,10 @@ function main() {
       request: express.Request,
       response: express.Response
     ): Promise<void> => {
-      const index = (await fs.readFile("index.html")).toString("utf-8");
-
       response.send(
         index.replace(
           "{contents}",
-          await renderStories(stories, "top", "/upvote", "/topic", "/domain")
+          renderStories(stories, "top", "/upvote", "/topic", "/domain")
         )
       );
     }
@@ -207,8 +202,21 @@ function main() {
     }
   );
 
-  app.listen(3000, () => {
-    console.log(`Example app listening on port 3000`);
+  app.post("/reset", (request, response) => {
+    for (const story of stories) {
+      for (const originalStory of originalStories) {
+        if (story.id === originalStory.id) {
+          story.positiveFeedback = originalStory.positiveFeedback;
+        }
+      }
+    }
+    response.sendStatus(200);
+    response.end();
+  });
+
+  const port = process.env.PORT || 3000;
+  app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`);
   });
 }
 

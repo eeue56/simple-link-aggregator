@@ -1,0 +1,31 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script type="text/javascript">
+            window.google = {
+                script: {
+                    run: {
+                        withSuccessHandler: (onSuccess) => {
+                            return {
+                                upvoteStory: (/** @type {number} */ id, /** @type {string} */ url) => {
+                                    fetch(url, {
+                                        method: "POST",
+                                        mode: "no-cors",
+                                        redirect: "follow",
+                                    }).then((data) => {
+                                        data.json().then((response) => {
+                                            onSuccess(response.positiveFeedback);
+                                        });
+                                    });
+                                }
+                            };
+                        }
+                    }
+                }
+            };
+        </script>
+    </head>
+    <body>
+        {contents}
+    </body>
+</html>

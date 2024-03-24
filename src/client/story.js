@@ -1,13 +1,13 @@
-const UPVOTED_ITEMS_KEY = "upvotedItems";
+const UPVOTED_ITEMS_KEY = "upvotedStoryIds";
 
 // @ts-ignore
 const IS_GOOGLE_SCRIPT = typeof google !== "undefined";
 
 /**
- *
+ * Get upvoted story ids from localstorage
  * @returns {number[]}
  */
-function getUpvotedItems() {
+function getUpvotedStoryIds() {
   return (
     localStorage
       .getItem(UPVOTED_ITEMS_KEY)
@@ -17,13 +17,13 @@ function getUpvotedItems() {
 }
 
 /**
- *
- * @param {number[]} upvotedItems
+ * Set the upvoted story ids in localstorage
+ * @param {number[]} upvotedStoryIds
  */
-function setUpvotedItems(upvotedItems) {
+function setUpvotedStoryIds(upvotedStoryIds) {
   localStorage.setItem(
     UPVOTED_ITEMS_KEY,
-    upvotedItems.map((x) => `${x}`).join(",")
+    upvotedStoryIds.map((x) => `${x}`).join(",")
   );
 }
 
@@ -33,7 +33,9 @@ function setUpvotedItems(upvotedItems) {
  */
 
 /**
- *
+ * Handle clicking on an upvote
+ * If already upvoted, do nothing. There is no downvoting or unvoting.
+ * Sends a request to the backend to increment the score.
  * @param {Event} event
  */
 async function upvoteClick(event) {
@@ -44,6 +46,7 @@ async function upvoteClick(event) {
     return;
   }
 
+  // already upvoted
   if ([...clickedElement.classList].includes("upvoted")) {
     return;
   }
@@ -51,14 +54,17 @@ async function upvoteClick(event) {
   const url = clickedElement.getAttribute("data-upvote-url");
   const id = parseInt(clickedElement.getAttribute("data-story-id") || "NaN");
 
+  // shouldn't be possible
   if (!url) {
     return;
   }
 
+  // shouldn't be possible
   if (!id || isNaN(id)) {
     return;
   }
 
+  // add upvoted class if it's not there already
   clickedElement.classList.toggle("upvoted");
 
   if (IS_GOOGLE_SCRIPT) {
@@ -79,11 +85,11 @@ async function upvoteClick(event) {
 
         maybePositiveFeedbackElement.innerText = `${newCount}`;
 
-        const upvotedItems = getUpvotedItems();
-        upvotedItems.push(id);
-        setUpvotedItems(upvotedItems);
+        const upvotedStoryIds = getUpvotedStoryIds();
+        upvotedStoryIds.push(id);
+        setUpvotedStoryIds(upvotedStoryIds);
       })
-      .upvoteStory(id);
+      .upvoteStory(id, url);
   } else {
     const response = /** @type {UpdatedPositiveFeedbackCount} */ (
       await (
@@ -108,16 +114,19 @@ async function upvoteClick(event) {
 
     maybePositiveFeedbackElement.innerText = `${response.positiveFeedback}`;
 
-    const upvotedItems = getUpvotedItems();
-    upvotedItems.push(id);
-    setUpvotedItems(upvotedItems);
+    const upvotedStoryIds = getUpvotedStoryIds();
+    upvotedStoryIds.push(id);
+    setUpvotedStoryIds(upvotedStoryIds);
   }
 }
 
-function restoreUpvotedItemsToDom() {
-  const upvotedItems = getUpvotedItems();
+/**
+ * Make sure previously upvoted stories by this user are still upvoted.
+ */
+function restoreUpvotedStoryIdsToDom() {
+  const upvotedStoryIds = getUpvotedStoryIds();
 
-  for (const id of upvotedItems) {
+  for (const id of upvotedStoryIds) {
     const maybePositiveFeedbackElement = document.getElementById(
       `story-upvote-${id}`
     );
@@ -130,7 +139,11 @@ function restoreUpvotedItemsToDom() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", restoreUpvotedItemsToDom, false);
+document.addEventListener(
+  "DOMContentLoaded",
+  restoreUpvotedStoryIdsToDom,
+  false
+);
 
 [...document.getElementsByClassName("story-upvote")].forEach((element) =>
   element.addEventListener("click", upvoteClick)

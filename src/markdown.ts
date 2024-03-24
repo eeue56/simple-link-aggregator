@@ -1,40 +1,40 @@
-export type ReadingText = "ReadingText";
-export type ReadingLinkText = "ReadingLinkText";
-export type ReadingLinkUrl = "ReadingLinkUrl";
-export type ReadingBold = "ReadingBold";
-export type ReadingItalic = "ReadingItalic";
+type ReadingText = "ReadingText";
+type ReadingLinkText = "ReadingLinkText";
+type ReadingLinkUrl = "ReadingLinkUrl";
+type ReadingBold = "ReadingBold";
+type ReadingItalic = "ReadingItalic";
 
-export type State =
+type State =
   | ReadingText
   | ReadingLinkText
   | ReadingLinkUrl
   | ReadingBold
   | ReadingItalic;
 
-export type Text = {
+type Text = {
   kind: "Text";
   text: string;
 };
 
-export type Bold = {
+type Bold = {
   kind: "Bold";
   text: string;
 };
 
-export type Italic = {
+type Italic = {
   kind: "Italic";
   text: string;
 };
 
-export type Link = {
+type Link = {
   kind: "Link";
   text: string;
   url: string;
 };
 
-export type Ast = Text | Link | Bold | Italic;
+type Ast = Text | Link | Bold | Italic;
 
-export function astToHtml(astList: Ast[]): string {
+function astToHtml(astList: Ast[]): string {
   let text = "";
 
   for (const ast of astList) {
@@ -60,7 +60,7 @@ export function astToHtml(astList: Ast[]): string {
   return text;
 }
 
-export function astToMarkdown(astList: Ast[]): string {
+function astToMarkdown(astList: Ast[]): string {
   let text = "";
 
   for (const ast of astList) {
@@ -86,7 +86,7 @@ export function astToMarkdown(astList: Ast[]): string {
   return text;
 }
 
-export function parseTextBlock(str: string): Ast[] {
+function parseTextBlock(str: string): Ast[] {
   const ast: Ast[] = [];
 
   let state: State = "ReadingText";
@@ -219,9 +219,12 @@ export function parseTextBlock(str: string): Ast[] {
   return ast;
 }
 
-/*
-Opens a file, reads it, converts it from markdown to html.
-*/
+/**
+ * Opens a file, reads it, converts it from markdown to html.
+ *
+ * @param contents the string to convert from markdown
+ * @returns html
+ */
 export function markdownConverter(contents: string): string {
   const items: string[] = [];
 

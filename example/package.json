@@ -4,13 +4,19 @@
   "description": "A simple link aggregator built on AppScript",
   "main": "index.js",
   "scripts": {
-    "watch": "nodemon --watch src --watch ../src --exec 'npm run build' -e ts,css,js",
-    "build": "cd ../ && ./build.py && cd example && ts-node src/index.ts"
+    "watch": "nodemon --watch src --watch ../src --exec 'npm run build && npm run serve' -e ts,css,js,html",
+    "watch-google": "nodemon --watch src --watch ../src --exec 'npm run build && npm run serve-google' -e ts,css,js,html",
+    "serve": "ts-node src/index.ts",
+    "serve-google": "WITH_GOOGLE_SHIM=true ts-node src/index.ts",
+    "build": "cd ../ && ./build.py",
+    "test": "npx playwright test && npx playwright test -c playwright_serial.config.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@playwright/test": "^1.42.1",
+    "@types/node": "^20.11.30",
     "prettier": "^3.2.5"
   },
   "dependencies": {
