@@ -1,6 +1,6 @@
 {
   "name": "simple-link-aggregator",
-  "version": "0.0.1-alpha.5",
+  "version": "0.0.1",
   "description": "A simple link aggregator built on Apps Script",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,7 +8,10 @@
     "test": "tsc --noEmit && npx prettier --check src && npm run build && cd example && npm test",
     "build": "./build.py"
   },
-  "keywords": ["AppsScript", "aggregator" ],
+  "keywords": [
+    "AppsScript",
+    "aggregator"
+  ],
   "author": "eeue56",
   "license": "BSD-3-Clause",
   "devDependencies": {
