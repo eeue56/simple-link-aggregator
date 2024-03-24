@@ -222,8 +222,8 @@ function parseTextBlock(str: string): Ast[] {
 /**
  * Opens a file, reads it, converts it from markdown to html.
  *
- * @param contents the string to convert from markdown
- * @returns html
+ * @param contents The string to convert from markdown
+ * @returns Html
  */
 export function markdownConverter(contents: string): string {
   const items: string[] = [];
@@ -239,7 +239,7 @@ export function markdownConverter(contents: string): string {
         isInList = true;
       }
       listItems.push(
-        `<li>${astToHtml(parseTextBlock(line.replace("-", "")))}</li>`
+        `<li>${astToHtml(parseTextBlock(line.replace("-", "")))}</li>`,
       );
     } else {
       if (isInList) {

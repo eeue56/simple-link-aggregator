@@ -11,7 +11,7 @@ const stories = [
     ["Workflow"],
     "A Vimium inspired keyboard shortcut script for browsers. Highlights all clickable elements on a page, then provides shortcuts to click them so you never have to leave your keyboard again!",
     "A handy way to learn about making Chrome extensions, testing them with Playwright, and using JSDoc",
-    1
+    1,
   ),
   Story(
     2,
@@ -21,7 +21,7 @@ const stories = [
     ["Languages"],
     "A language for making WebAssembly easier as a target for ML family languages. Gwe is written in Rust, and targets WebAssembly. The language is intended to be a friendly layer between ML-languages and WebAssembly.",
     "Making it easier to target WebAssembly makes it easier for developers to create fast, web-compatiable, code.",
-    125
+    125,
   ),
   Story(
     3,
@@ -31,7 +31,7 @@ const stories = [
     ["Languages"],
     "A language for making WebAssembly easier as a target for ML family languages. Gwe is written in Rust, and targets WebAssembly. The language is intended to be a friendly layer between ML-languages and WebAssembly.",
     "Making it easier to target WebAssembly makes it easier for developers to create fast, web-compatiable, code.",
-    113
+    113,
   ),
   Story(
     4,
@@ -43,7 +43,7 @@ const stories = [
 
 The new paper demonstrates that the number of removed or changed lines within two weeks (churn) after being committed has raised considerably year-on-year since Copilot became prevalent. There was also a significant raise in the amount of copy/pasted or repeated code. They imply that Copilot has lead to an increase in broken or poor quality code committed, along with a raise in code that breaks the [Don't Repeat Yourself](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) rule.`,
     "Copilot and other AI code assistant tools are here to stay, getting more popular as time goes on. Developers must ensure that code written with the aid of these tools are as of high quality as their hand-written code, be it during writing or during code review.",
-    150
+    150,
   ),
   Story(
     5,
@@ -61,7 +61,7 @@ Some highlights:
 - Dig into research papers.
 - Take on big projects and get uncomfortable.`,
     "Continual growth and personal development is an ambition we all probably have, but figuring out how to do so can be difficult. Ever got to your development talk session and not really been sure what to put as your goals? This article lists a few that could help guide you.",
-    150
+    150,
   ),
 ];
 
@@ -72,7 +72,7 @@ const originalStories = stories.map((story) => {
 function main() {
   const withGoogleShim = !!process.env.WITH_GOOGLE_SHIM;
   console.log(
-    withGoogleShim ? "Using Google shim..." : "Using regular JavaScript..."
+    withGoogleShim ? "Using Google shim..." : "Using regular JavaScript...",
   );
   const index = fs
     .readFileSync(withGoogleShim ? "index_with_google.html" : "index.html")
@@ -83,45 +83,45 @@ function main() {
     "/",
     async (
       request: express.Request,
-      response: express.Response
+      response: express.Response,
     ): Promise<void> => {
       response.send(
         index.replace(
           "{contents}",
-          renderStories(stories, "default", "/upvote", "/topic", "/domain")
-        )
+          renderStories(stories, "default", "/upvote", "/topic", "/domain"),
+        ),
       );
-    }
+    },
   );
 
   app.get(
     "/topic/:name",
     async (
       request: express.Request,
-      response: express.Response
+      response: express.Response,
     ): Promise<void> => {
       response.send(
         index.replace(
           "{contents}",
           renderStories(
             stories.filter((story) =>
-              story.topic.includes(request.params.name)
+              story.topic.includes(request.params.name),
             ),
             "default",
             "/upvote",
             "/topic",
-            "/domain"
-          )
-        )
+            "/domain",
+          ),
+        ),
       );
-    }
+    },
   );
 
   app.get(
     "/domain/:name",
     async (
       request: express.Request,
-      response: express.Response
+      response: express.Response,
     ): Promise<void> => {
       response.send(
         index.replace(
@@ -134,48 +134,48 @@ function main() {
             "default",
             "/upvote",
             "/topic",
-            "/domain"
-          )
-        )
+            "/domain",
+          ),
+        ),
       );
-    }
+    },
   );
 
   app.get(
     "/new",
     async (
       request: express.Request,
-      response: express.Response
+      response: express.Response,
     ): Promise<void> => {
       response.send(
         index.replace(
           "{contents}",
-          renderStories(stories, "new", "/upvote", "/topic", "/domain")
-        )
+          renderStories(stories, "new", "/upvote", "/topic", "/domain"),
+        ),
       );
-    }
+    },
   );
 
   app.get(
     "/top",
     async (
       request: express.Request,
-      response: express.Response
+      response: express.Response,
     ): Promise<void> => {
       response.send(
         index.replace(
           "{contents}",
-          renderStories(stories, "top", "/upvote", "/topic", "/domain")
-        )
+          renderStories(stories, "top", "/upvote", "/topic", "/domain"),
+        ),
       );
-    }
+    },
   );
 
   app.post(
     "/upvote/:id",
     async (
       request: express.Request,
-      response: express.Response
+      response: express.Response,
     ): Promise<void> => {
       const id = parseInt(request.params.id);
 
@@ -199,7 +199,7 @@ function main() {
       response.send({
         positiveFeedback: story.positiveFeedback,
       });
-    }
+    },
   );
 
   app.post("/reset", (request, response) => {

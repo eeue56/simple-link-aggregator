@@ -5,14 +5,15 @@ const CLIENT_JS = `{CLIENT_JS_REPLACE_ME}`;
 
 /**
  * A story is composed of:
- * - a unique id
- * - the date submitted
- * - the link
- * - the title
- * - the topics (or tags), as an array
- * - a short summary
- * - an explaination on why it's relevant
- * - the amount of positive feedback (or upvotes) it got
+ *
+ * - A unique id
+ * - The date submitted
+ * - The link
+ * - The title
+ * - The topics (or tags), as an array
+ * - A short summary
+ * - An explaination on why it's relevant
+ * - The amount of positive feedback (or upvotes) it got
  */
 export type Story = {
   kind: "Story";
@@ -28,15 +29,16 @@ export type Story = {
 
 /**
  * Constructor for @type {Story}
- * @param id a unique id
- * @param date the date submitted
- * @param link the link
- * @param title the title
- * @param topic the topics (or tags), as an array
- * @param summary a short summary
- * @param relevance an explaination on why it's relevant
- * @param positiveFeedback the amount of positive feedback (or upvotes) it got
- * @returns a @type {Story}
+ *
+ * @param id A unique id
+ * @param date The date submitted
+ * @param link The link
+ * @param title The title
+ * @param topic The topics (or tags), as an array
+ * @param summary A short summary
+ * @param relevance An explaination on why it's relevant
+ * @param positiveFeedback The amount of positive feedback (or upvotes) it got
+ * @returns A @type {Story}
  */
 export function Story(
   id: number,
@@ -46,7 +48,7 @@ export function Story(
   topic: string[],
   summary: string,
   relevance: string,
-  positiveFeedback: number
+  positiveFeedback: number,
 ): Story {
   return {
     kind: "Story",
@@ -67,12 +69,13 @@ type UrlPieces = {
 
 /**
  * AppsScript doesn't support URL, so manually grab the hostname
- * @param href a full url
- * @returns the hostname in an object
+ *
+ * @param href A full url
+ * @returns The hostname in an object
  */
 function url_shim(href: string): UrlPieces {
   var match = href.match(
-    /^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/
+    /^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/,
   );
 
   if (match) {
@@ -89,8 +92,9 @@ function url_shim(href: string): UrlPieces {
 
 /**
  * Remove the first emojis from a string (e.g in a title)
- * @param str a string possibly with :emojis:
- * @returns a string without the first
+ *
+ * @param str A string possibly with :emojis:
+ * @returns A string without the first
  */
 function stripEmojis(str: string): string {
   return str.replace(/:.+:/g, "");
@@ -103,18 +107,23 @@ function renderTopic(topic: string, topicUrl: string): string {
 /**
  * Render an individual story - note, does not contain css or js.
  *
- * Note: you probably want @function renderStories which contains the css and js.
- * @param story the story to render
- * @param upvoteUrl the upvote url, it should look like https://example.com/upvote/${story.id} (POST)
- * @param topicUrl the url for seeing specific topics, it should look like https://example.com/topic/${story.id} (GET)
- * @param domainUrl the url for seeing specific topics, it should look like https://example.com/domain/${story.id} (GET)
+ * Note: you probably want @function renderStories which contains the css and
+ * js.
+ *
+ * @param story The story to render
+ * @param upvoteUrl The upvote url, it should look like
+ *   https://example.com/upvote/${story.id} (POST)
+ * @param topicUrl The url for seeing specific topics, it should look like
+ *   https://example.com/topic/${story.id} (GET)
+ * @param domainUrl The url for seeing specific topics, it should look like
+ *   https://example.com/domain/${story.id} (GET)
  * @returns
  */
 export function renderStory(
   story: Story,
   upvoteUrl: string,
   topicUrl: string,
-  domainUrl: string
+  domainUrl: string,
 ): string {
   const { hostname } = url_shim(story.link);
   const title = stripEmojis(story.title);
@@ -147,8 +156,10 @@ export function renderStory(
 /**
  * Render the client-side JS
  *
- * Note: you probably want to use @function renderStories instead which already includes this.
- * @returns the client-side JS wrapped in a script tag
+ * Note: you probably want to use @function renderStories instead which already
+ * includes this.
+ *
+ * @returns The client-side JS wrapped in a script tag
  */
 export function renderJavaScript(): string {
   return `<script type="text/javascript">${CLIENT_JS}</script>`;
@@ -157,24 +168,24 @@ export function renderJavaScript(): string {
 /**
  * Render the client-side CSS
  *
- * Note: you probably want to use @function renderStories instead which already includes this.
- * @returns the client-side CSS wrapped in a style tag
+ * Note: you probably want to use @function renderStories instead which already
+ * includes this.
+ *
+ * @returns The client-side CSS wrapped in a style tag
  */
 export function renderCss(): string {
   return `<style>${CLIENT_CSS}</style>`;
 }
 
 /**
- * default: sort last 7 days by top, the rest by new
- * new: sort all articles by age (newest first)
- * top: sort all articles by score (highest first)
+ * Default: sort last 7 days by top, the rest by new new: sort all articles by
+ * age (newest first) top: sort all articles by score (highest first)
  */
 export type StorySort = "default" | "new" | "top";
 
 /**
- *
- * @param stories the stories to sort
- * @param storySort the sort method to use
+ * @param stories The stories to sort
+ * @param storySort The sort method to use
  * @returns
  */
 function sort(stories: Story[], storySort: StorySort): Story[] {
@@ -182,10 +193,10 @@ function sort(stories: Story[], storySort: StorySort): Story[] {
     case "default": {
       const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
       const storiesFromTheLastSevenDays = stories.filter(
-        (story) => story.date >= sevenDaysAgo
+        (story) => story.date >= sevenDaysAgo,
       );
       const storiesFromBefore = stories.filter(
-        (story) => story.date < sevenDaysAgo
+        (story) => story.date < sevenDaysAgo,
       );
       return [
         ...sort(storiesFromTheLastSevenDays, "top"),
@@ -197,28 +208,32 @@ function sort(stories: Story[], storySort: StorySort): Story[] {
     }
     case "top": {
       return [...stories].sort(
-        (a, b) => b.positiveFeedback - a.positiveFeedback
+        (a, b) => b.positiveFeedback - a.positiveFeedback,
       );
     }
   }
 }
 
 /**
- * Takes a bunch of stories, sorts them, then renders them with css and provides js for handling upvotes
+ * Takes a bunch of stories, sorts them, then renders them with css and provides
+ * js for handling upvotes
  *
- * @param stories the stories to render
- * @param storyStory the sorting method to use - default, new, or top
- * @param upvoteUrl the upvote url, it should look like https://example.com/upvote/${story.id}
- * @param topicUrl the url for seeing specific topics, it should look like https://example.com/topic/${story.id}
- * @param domainUrl the url for seeing specific topics, it should look like https://example.com/domain/${story.id}
- * @returns html as a string, containing the html, css and js needed
+ * @param stories The stories to render
+ * @param storyStory The sorting method to use - default, new, or top
+ * @param upvoteUrl The upvote url, it should look like
+ *   https://example.com/upvote/${story.id}
+ * @param topicUrl The url for seeing specific topics, it should look like
+ *   https://example.com/topic/${story.id}
+ * @param domainUrl The url for seeing specific topics, it should look like
+ *   https://example.com/domain/${story.id}
+ * @returns Html as a string, containing the html, css and js needed
  */
 export function renderStories(
   stories: Story[],
   storySort: StorySort,
   upvoteUrl: string,
   topicUrl: string,
-  domainUrl: string
+  domainUrl: string,
 ): string {
   return `
 ${renderCss()}

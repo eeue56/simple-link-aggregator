@@ -5,6 +5,7 @@ const IS_GOOGLE_SCRIPT = typeof google !== "undefined";
 
 /**
  * Get upvoted story ids from localstorage
+ *
  * @returns {number[]}
  */
 function getUpvotedStoryIds() {
@@ -18,12 +19,13 @@ function getUpvotedStoryIds() {
 
 /**
  * Set the upvoted story ids in localstorage
+ *
  * @param {number[]} upvotedStoryIds
  */
 function setUpvotedStoryIds(upvotedStoryIds) {
   localStorage.setItem(
     UPVOTED_ITEMS_KEY,
-    upvotedStoryIds.map((x) => `${x}`).join(",")
+    upvotedStoryIds.map((x) => `${x}`).join(","),
   );
 }
 
@@ -33,9 +35,10 @@ function setUpvotedStoryIds(upvotedStoryIds) {
  */
 
 /**
- * Handle clicking on an upvote
- * If already upvoted, do nothing. There is no downvoting or unvoting.
- * Sends a request to the backend to increment the score.
+ * Handle clicking on an upvote If already upvoted, do nothing. There is no
+ * downvoting or unvoting. Sends a request to the backend to increment the
+ * score.
+ *
  * @param {Event} event
  */
 async function upvoteClick(event) {
@@ -73,12 +76,12 @@ async function upvoteClick(event) {
     anyGoogle.script.run
       .withSuccessHandler((/** @type {number} */ newCount) => {
         const maybePositiveFeedbackElement = document.getElementById(
-          `story-positive-feedback-${id}`
+          `story-positive-feedback-${id}`,
         );
 
         if (maybePositiveFeedbackElement === null) {
           console.log(
-            "Positive feedback element was missing from the DOM for some reason"
+            "Positive feedback element was missing from the DOM for some reason",
           );
           return;
         }
@@ -102,12 +105,12 @@ async function upvoteClick(event) {
     );
 
     const maybePositiveFeedbackElement = document.getElementById(
-      `story-positive-feedback-${id}`
+      `story-positive-feedback-${id}`,
     );
 
     if (maybePositiveFeedbackElement === null) {
       console.log(
-        "Positive feedback element was missing from the DOM for some reason"
+        "Positive feedback element was missing from the DOM for some reason",
       );
       return;
     }
@@ -120,15 +123,13 @@ async function upvoteClick(event) {
   }
 }
 
-/**
- * Make sure previously upvoted stories by this user are still upvoted.
- */
+/** Make sure previously upvoted stories by this user are still upvoted. */
 function restoreUpvotedStoryIdsToDom() {
   const upvotedStoryIds = getUpvotedStoryIds();
 
   for (const id of upvotedStoryIds) {
     const maybePositiveFeedbackElement = document.getElementById(
-      `story-upvote-${id}`
+      `story-upvote-${id}`,
     );
 
     if (!maybePositiveFeedbackElement) {
@@ -142,9 +143,9 @@ function restoreUpvotedStoryIdsToDom() {
 document.addEventListener(
   "DOMContentLoaded",
   restoreUpvotedStoryIdsToDom,
-  false
+  false,
 );
 
 [...document.getElementsByClassName("story-upvote")].forEach((element) =>
-  element.addEventListener("click", upvoteClick)
+  element.addEventListener("click", upvoteClick),
 );

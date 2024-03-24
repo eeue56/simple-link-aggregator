@@ -1,19 +1,21 @@
 {
   "name": "simple-link-aggregator",
   "version": "0.0.1-alpha.5",
-  "description": "A simple link aggregator built on AppScript",
+  "description": "A simple link aggregator built on Apps Script",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "npm run build && cd example && npm test",
+    "test": "tsc --noEmit && npx prettier --check src && npm run build && cd example && npm test",
     "build": "./build.py"
   },
-  "keywords": [],
+  "keywords": ["AppsScript", "aggregator" ],
   "author": "eeue56",
   "license": "BSD-3-Clause",
   "devDependencies": {
     "@types/node": "^20.11.30",
-    "prettier": "^3.2.5"
+    "prettier": "^3.2.5",
+    "prettier-plugin-jsdoc": "^1.3.0",
+    "typescript": "^5.4.2"
   },
   "bugs": {
     "url": "https://github.com/eeue56/simple-link-aggregator/issues"
