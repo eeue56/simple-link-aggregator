@@ -2,6 +2,11 @@
 
 A simple link aggregator built to work with a custom backend, or a backend powered by AppsScript.
 
+Why might you want this? Imagine you have your data source for links in your aggregator coming from a Google Sheets document.
+
+[Screen recording 2024-03-22 09.15.32.webm](https://github.com/eeue56/simple-link-aggregator/assets/1139198/337454ca-e067-4348-b602-079451c344af)
+
+
 ## Install
 
 ```bash
@@ -138,7 +143,7 @@ There isn't a backend server included, but this is the API I'd recommend.
 |`/domain/:domain`| Only fetch articles with that domain| `GET` |
 |`/upvote/:story_id`| Upvote that story, and return the new count| `POST` |
 
-For a comprenhensive example, check out the [example](./example/) folder that implements this (without a permanent data store) that also happens to have all the tests.
+For a comprehensive example, check out the [example](./example/) folder that implements this (without a permanent data store) that also happens to have all the tests.
 
 ## Stories
 
