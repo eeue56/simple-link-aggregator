@@ -19,7 +19,7 @@ The idea is to have a backend that stores each story, then use this library to r
 
 ### Generating client side html
 
-`renderStories` should be your main entry point in the [story.ts](./src/story.ts) folder.
+`renderStories` should be your main entry point in the [story.ts](./src/story.ts) file.
 
 ```typescript
 const stories = [
@@ -221,3 +221,5 @@ Because AppsScript's runtime has some quirks (like not support `URL`), and the W
 - Avoid as many imports as possible, as deploying packages with imports on AppsScript complicates things.
 - Avoid reading files, prefering to do replacements as part of the [build](./build.py) step.
 - Remain backend agnositic.
+
+More learnings from this can be found [here](https://open.substack.com/pub/thetechenabler/p/open-sourcing-work-experiments-and?r=14jtfo&utm_campaign=post&utm_medium=web).
